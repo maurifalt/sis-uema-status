@@ -21,7 +21,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # ----------------------------------------------------------------------
 # Configurações
 # ----------------------------------------------------------------------
-URL = "https://sis.sig.uema.br/"
+URL = "https://sis.sig.uema.br/sigaa/verTelaLogin.do"
 TIMEOUT_SECONDS = 15
 
 # Quantos registros manter no histórico (evita o JSON crescer pra sempre).
