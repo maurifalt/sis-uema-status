@@ -227,6 +227,36 @@ function renderIncidents(history) {
   });
 }
 
+function showLoadError() {
+  const banner = document.getElementById("status-banner");
+  const icon = document.getElementById("status-icon");
+  const text = document.getElementById("status-text");
+  const sub = document.getElementById("status-sub");
+  const retryBtn = document.getElementById("retry-btn");
+
+  banner.classList.remove("state-up", "state-warn", "state-down");
+  banner.classList.add("state-error");
+  icon.innerHTML = "";
+  text.textContent = "Não foi possível carregar os dados";
+  sub.textContent = "Isso é uma falha deste painel, não necessariamente do SIS-UEMA. Tenta de novo:";
+  retryBtn.hidden = false;
+}
+
+// Uma falha de rede pode ser só um soluço passageiro — tenta mais uma vez
+// antes de mostrar erro pro usuário.
+async function fetchHistory(attempts = 2, delayMs = 1200) {
+  for (let i = 0; i < attempts; i++) {
+    try {
+      const res = await fetch(HISTORY_URL, { cache: "no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    } catch (err) {
+      if (i === attempts - 1) throw err;
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
+  }
+}
+
 function setRepoLink() {
   const link = document.getElementById("repo-link");
   // tenta inferir "usuario/repositorio" a partir da URL do GitHub Pages
@@ -242,19 +272,21 @@ function setRepoLink() {
 
 async function init() {
   setRepoLink();
+  document.getElementById("retry-btn").hidden = true;
 
   try {
-    const res = await fetch(HISTORY_URL, { cache: "no-store" });
-    const history = await res.json();
+    const history = await fetchHistory();
 
     renderBanner(history);
     renderUptimeRow(history);
     renderTimeline(history);
     renderIncidents(history);
   } catch (err) {
-    document.getElementById("status-text").textContent = "Erro ao carregar dados";
+    showLoadError();
     console.error("Falha ao carregar history.json:", err);
   }
 }
+
+document.getElementById("retry-btn").addEventListener("click", init);
 
 init();
