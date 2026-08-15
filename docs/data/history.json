@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "timestamp": "2026-08-15T14:06:53+00:00",
+    "status": "down",
+    "http_status": null,
+    "latency_ms": null,
+    "error": "ssl_error: HTTPSConnectionPool(host='sis.sig.uema.br', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)')))"
+  }
+]
