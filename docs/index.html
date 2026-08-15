@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SIS-UEMA Status</title>
+<meta name="description" content="Monitor não-oficial de disponibilidade do SIS-UEMA (sis.sig.uema.br)" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="scanline" aria-hidden="true"></div>
+
+  <header class="page-header">
+    <div class="wrap">
+      <div class="eyebrow">MONITOR NÃO-OFICIAL &middot; MANTIDO POR ESTUDANTES</div>
+      <h1>SIS<span class="dim">-</span>UEMA <span class="status-word">Status</span></h1>
+      <p class="subtitle">
+        Verificação automática de <code>sis.sig.uema.br</code> a cada 5 minutos.
+        Nada de "será que é só comigo" — aqui você confere.
+      </p>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section class="hero-card" id="hero-card">
+      <div class="pulse-wrap" aria-hidden="true">
+        <svg viewBox="0 0 400 60" preserveAspectRatio="none" class="pulse-svg">
+          <polyline id="pulse-line" points="" fill="none" stroke-width="2" />
+        </svg>
+      </div>
+
+      <div class="hero-content">
+        <div class="status-dot-row">
+          <span class="dot" id="status-dot"></span>
+          <span class="status-text" id="status-text">Carregando…</span>
+        </div>
+        <div class="hero-meta">
+          <div class="meta-item">
+            <span class="meta-label">Última verificação</span>
+            <span class="meta-value" id="last-check">—</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Latência</span>
+            <span class="meta-value" id="latency">—</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Código HTTP</span>
+            <span class="meta-value" id="http-code">—</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="uptime-row">
+      <div class="uptime-card">
+        <span class="uptime-value" id="uptime-24h">—</span>
+        <span class="uptime-label">últimas 24h</span>
+      </div>
+      <div class="uptime-card">
+        <span class="uptime-value" id="uptime-7d">—</span>
+        <span class="uptime-label">últimos 7 dias</span>
+      </div>
+      <div class="uptime-card">
+        <span class="uptime-value" id="uptime-30d">—</span>
+        <span class="uptime-label">últimos 30 dias</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Histórico recente</h2>
+        <span class="panel-hint">cada barra = 1 verificação · passe o mouse para detalhes</span>
+      </div>
+      <div class="heatmap" id="heatmap"></div>
+      <div class="heatmap-legend">
+        <span><i class="swatch up"></i> no ar</span>
+        <span><i class="swatch down"></i> fora do ar</span>
+        <span><i class="swatch unknown"></i> sem dado</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Incidentes recentes</h2>
+        <span class="panel-hint">períodos consecutivos fora do ar</span>
+      </div>
+      <ul class="incident-list" id="incident-list">
+        <li class="incident-empty">Carregando incidentes…</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="page-footer">
+    <div class="wrap">
+      <p>
+        Projeto independente, sem vínculo oficial com a UEMA. Dados coletados automaticamente
+        via <a href="https://github.com/features/actions" target="_blank" rel="noopener">GitHub Actions</a>
+        e publicados em <a href="#" id="repo-link" target="_blank" rel="noopener">GitHub Pages</a>.
+      </p>
+      <p class="footer-updated">Página atualizada automaticamente ao carregar.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

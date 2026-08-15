@@ -1,0 +1,354 @@
+:root {
+  --bg: #0b1120;
+  --bg-raised: #121a2e;
+  --bg-raised-2: #16203a;
+  --border: #232f4d;
+  --text: #e7ebf5;
+  --text-muted: #8894ac;
+  --text-dim: #5c6786;
+
+  --up: #34d399;
+  --up-dim: #1c4a3c;
+  --down: #f8717a;
+  --down-dim: #4a2028;
+  --amber: #fbbf24;
+
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(52, 211, 153, 0.06), transparent 45%),
+    radial-gradient(circle at 85% 10%, rgba(248, 113, 122, 0.05), transparent 40%);
+  min-height: 100vh;
+}
+
+.wrap {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+a { color: var(--up); }
+
+code {
+  font-family: var(--font-mono);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: var(--text);
+}
+
+/* subtle scanline texture, nods to a terminal/CRT status board */
+.scanline {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.012) 0px,
+    rgba(255, 255, 255, 0.012) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 100;
+}
+
+/* ---------- header ---------- */
+.page-header {
+  padding: 56px 0 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 40px;
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+
+h1 .dim { color: var(--text-dim); }
+h1 .status-word { color: var(--up); }
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0;
+}
+
+/* ---------- hero status card ---------- */
+main.wrap { padding-top: 32px; padding-bottom: 64px; }
+
+.hero-card {
+  position: relative;
+  background: linear-gradient(180deg, var(--bg-raised) 0%, var(--bg-raised-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.pulse-wrap {
+  width: 100%;
+  height: 60px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(0,0,0,0.15);
+}
+
+.pulse-svg { width: 100%; height: 100%; }
+#pulse-line {
+  stroke: var(--up);
+  filter: drop-shadow(0 0 4px rgba(52, 211, 153, 0.5));
+}
+
+.hero-content { padding: 24px 28px 28px; }
+
+.status-dot-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  box-shadow: 0 0 0 4px transparent;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.dot.up {
+  background: var(--up);
+  box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.16);
+  animation: pulse-up 2s ease-in-out infinite;
+}
+
+.dot.down {
+  background: var(--down);
+  box-shadow: 0 0 0 4px rgba(248, 113, 122, 0.16);
+}
+
+@keyframes pulse-up {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.16); }
+  50% { box-shadow: 0 0 0 8px rgba(52, 211, 153, 0.08); }
+}
+
+.status-text {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.hero-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.meta-item { display: flex; flex-direction: column; gap: 6px; }
+
+.meta-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.meta-value {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--text);
+}
+
+/* ---------- uptime row ---------- */
+.uptime-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.uptime-card {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.uptime-value {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--up);
+}
+
+.uptime-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ---------- panels ---------- */
+.panel {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px 24px;
+  margin-bottom: 20px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.panel-header h2 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  margin: 0;
+  color: var(--text);
+}
+
+.panel-hint {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* heatmap: git-contribution-style strip of checks */
+.heatmap {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 48px;
+  overflow: hidden;
+}
+
+.heatmap-bar {
+  flex: 1 1 auto;
+  min-width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--border);
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.heatmap-bar.up { background: var(--up-dim); }
+.heatmap-bar.up:hover { background: var(--up); }
+.heatmap-bar.down { background: var(--down); }
+.heatmap-bar.down:hover { opacity: 0.8; }
+.heatmap-bar.unknown { background: var(--border); }
+
+.heatmap-legend {
+  display: flex;
+  gap: 18px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.heatmap-legend span { display: flex; align-items: center; gap: 6px; }
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.swatch.up { background: var(--up-dim); }
+.swatch.down { background: var(--down); }
+.swatch.unknown { background: var(--border); }
+
+/* incident list */
+.incident-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.incident-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--bg-raised-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--down);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.incident-empty {
+  border-left: 3px solid var(--border) !important;
+  color: var(--text-muted);
+  justify-content: flex-start !important;
+}
+
+.incident-time { font-family: var(--font-mono); color: var(--text-muted); }
+.incident-duration {
+  font-family: var(--font-mono);
+  color: var(--down);
+  font-weight: 500;
+}
+
+/* ---------- footer ---------- */
+.page-footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 0 48px;
+}
+
+.page-footer p {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  max-width: 520px;
+  margin: 0 0 6px;
+}
+
+.footer-updated { color: var(--text-dim); }
+
+@media (max-width: 560px) {
+  h1 { font-size: 30px; }
+  .hero-meta { grid-template-columns: 1fr; gap: 12px; }
+  .uptime-row { grid-template-columns: 1fr; }
+}
