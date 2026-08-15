@@ -7,7 +7,7 @@
 <meta name="description" content="Monitor não-oficial de disponibilidade do SIS-UEMA (sis.sig.uema.br)" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -27,31 +27,25 @@
 
   <main class="wrap">
 
-    <section class="hero-card" id="hero-card">
-      <div class="pulse-wrap" aria-hidden="true">
-        <svg viewBox="0 0 400 60" preserveAspectRatio="none" class="pulse-svg">
-          <polyline id="pulse-line" points="" fill="none" stroke-width="2" />
-        </svg>
+    <!-- Downdetector-style banner: big color wash, icon, plain-language status -->
+    <section class="status-banner" id="status-banner">
+      <div class="status-icon" id="status-icon" aria-hidden="true"></div>
+      <div class="status-copy">
+        <span class="status-text" id="status-text">Carregando…</span>
+        <span class="status-sub" id="status-sub">Buscando dados mais recentes</span>
       </div>
-
-      <div class="hero-content">
-        <div class="status-dot-row">
-          <span class="dot" id="status-dot"></span>
-          <span class="status-text" id="status-text">Carregando…</span>
+      <div class="status-meta">
+        <div class="meta-item">
+          <span class="meta-label">Última verificação</span>
+          <span class="meta-value" id="last-check">—</span>
         </div>
-        <div class="hero-meta">
-          <div class="meta-item">
-            <span class="meta-label">Última verificação</span>
-            <span class="meta-value" id="last-check">—</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">Latência</span>
-            <span class="meta-value" id="latency">—</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">Código HTTP</span>
-            <span class="meta-value" id="http-code">—</span>
-          </div>
+        <div class="meta-item">
+          <span class="meta-label">Latência</span>
+          <span class="meta-value" id="latency">—</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Código HTTP</span>
+          <span class="meta-value" id="http-code">—</span>
         </div>
       </div>
     </section>
@@ -73,12 +67,13 @@
 
     <section class="panel">
       <div class="panel-header">
-        <h2>Histórico recente</h2>
-        <span class="panel-hint">cada barra = 1 verificação · passe o mouse para detalhes</span>
+        <h2>Linha do tempo</h2>
+        <span class="panel-hint">cada barra = 1 verificação · altura = latência · passe o mouse para detalhes</span>
       </div>
-      <div class="heatmap" id="heatmap"></div>
+      <div class="timeline" id="heatmap" role="img" aria-label="Histórico de verificações recentes"></div>
       <div class="heatmap-legend">
         <span><i class="swatch up"></i> no ar</span>
+        <span><i class="swatch warn"></i> no ar, SSL com problema</span>
         <span><i class="swatch down"></i> fora do ar</span>
         <span><i class="swatch unknown"></i> sem dado</span>
       </div>
@@ -95,6 +90,12 @@
     </section>
 
   </main>
+
+  <!-- custom hover tooltip for the timeline bars -->
+  <div class="chart-tooltip" id="chart-tooltip" role="tooltip" hidden>
+    <span class="chart-tooltip-value" id="chart-tooltip-value"></span>
+    <span class="chart-tooltip-meta" id="chart-tooltip-meta"></span>
+  </div>
 
   <footer class="page-footer">
     <div class="wrap">
