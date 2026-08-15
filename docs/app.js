@@ -52,10 +52,17 @@ function renderHero(history) {
 
   const latest = history[history.length - 1];
   const isUp = latest.status === "up";
+  const hasSslIssue = latest.error === "ssl_certificate_invalid";
 
   dot.classList.add(isUp ? "up" : "down");
-  text.textContent = isUp ? "Online" : "Fora do ar";
-  text.style.color = isUp ? "var(--up)" : "var(--down)";
+  if (isUp && hasSslIssue) {
+    text.textContent = "Online (certificado SSL com problema)";
+    text.style.color = "var(--amber)";
+    dot.style.background = "var(--amber)";
+  } else {
+    text.textContent = isUp ? "Online" : "Fora do ar";
+    text.style.color = isUp ? "var(--up)" : "var(--down)";
+  }
 
   lastCheckEl.textContent = `${fmtDateTime(latest.timestamp)} (${timeAgo(latest.timestamp)})`;
   latencyEl.textContent = latest.latency_ms != null ? `${latest.latency_ms} ms` : "—";

@@ -12,6 +12,11 @@ import time
 from datetime import datetime, timezone
 
 import requests
+import urllib3
+
+# Suprime o aviso "InsecureRequestWarning" — sabemos que estamos desativando
+# a verificação de propósito, só como fallback de diagnóstico (ver check_site()).
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # ----------------------------------------------------------------------
 # Configurações
@@ -79,8 +84,27 @@ def check_site():
 
     except requests.exceptions.Timeout:
         entry["error"] = "timeout"
-    except requests.exceptions.SSLError as e:
-        entry["error"] = f"ssl_error: {e}"
+    except requests.exceptions.SSLError:
+        # O certificado do site está com problema (cadeia incompleta, expirado
+        # etc.), mas isso não significa necessariamente que o site está fora
+        # do ar. Tentamos de novo sem validar o certificado só para checar se
+        # o servidor pelo menos responde.
+        try:
+            fallback_start = time.time()
+            response = requests.get(
+                URL,
+                timeout=TIMEOUT_SECONDS,
+                headers={"User-Agent": "SIS-UEMA-StatusChecker/1.0"},
+                allow_redirects=True,
+                verify=False,
+            )
+            latency_ms = round((time.time() - fallback_start) * 1000)
+            entry["http_status"] = response.status_code
+            entry["latency_ms"] = latency_ms
+            entry["status"] = "up" if response.status_code < 500 else "down"
+            entry["error"] = "ssl_certificate_invalid"
+        except requests.exceptions.RequestException as e2:
+            entry["error"] = f"ssl_error_and_unreachable: {e2}"
     except requests.exceptions.ConnectionError as e:
         entry["error"] = f"connection_error: {e}"
     except requests.exceptions.RequestException as e:
