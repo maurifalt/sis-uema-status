@@ -3099,5 +3099,12 @@
     "http_status": 200,
     "latency_ms": 1229,
     "error": "ssl_certificate_invalid"
+  },
+  {
+    "timestamp": "2026-08-23T20:59:04+00:00",
+    "status": "up",
+    "http_status": 200,
+    "latency_ms": 1306,
+    "error": "ssl_certificate_invalid"
   }
 ]
