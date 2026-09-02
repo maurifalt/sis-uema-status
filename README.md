@@ -95,21 +95,46 @@ Edite `.github/workflows/check.yml`, linha do `cron`. Exemplos:
 (GitHub Actions não permite intervalos menores que 5 min em repositórios gratuitos.)
 
 ### Detectar "falso positivo" (site responde mas mostra erro/manutenção)
-Em `scripts/check.py`, preencha a variável `EXPECTED_TEXT_SNIPPET` com um trecho de texto
+Preencha a variável `EXPECTED_TEXT_SNIPPET` em `scripts/check.py` com um trecho de texto
 que sempre aparece na tela de login normal do SIS, por exemplo:
 ```python
 EXPECTED_TEXT_SNIPPET = "Sistema Integrado de Gestão"
 ```
+Ou, sem editar o código, use a variável de ambiente `SIS_EXPECTED_SNIPPET`.
 Se esse texto não aparecer na resposta, o check marca como `down` mesmo com HTTP 200.
+
+### Quantos registros manter no histórico
+Em `scripts/check.py`, a constante `DEFAULT_MAX_HISTORY_ENTRIES` (padrão: 2016,
+equivalente a 7 dias com check a cada 5 min) — ou a variável de ambiente
+`SIS_MAX_HISTORY`. Aumente se quiser reter mais histórico — o arquivo JSON cresce,
+mas é leve (poucos KB até milhares de registros).
+
+### Configurar tudo por variável de ambiente
+Nenhuma opção precisa ser editada no código. Todas têm fallback seguro (valores
+inválidos são ignorados com um aviso em stderr):
+
+| Variável | Padrão | O que faz |
+|---|---|---|
+| `SIS_URL` | `https://sis.sig.uema.br/sigaa/verTelaLogin.do` | Endereço verificado |
+| `SIS_TIMEOUT` | `15` | Timeout da requisição (segundos) |
+| `SIS_MAX_HISTORY` | `2016` | Quantos registros manter |
+| `SIS_HISTORY_PATH` | `docs/data/history.json` | Onde salvar o histórico |
+| `SIS_EXPECTED_SNIPPET` | (vazio) | Texto obrigatório para marcar como `up` |
+
+### Linha de comando
+```bash
+python scripts/check.py                  # verifica agora e registra (padrão)
+python scripts/check.py --dry-run        # verifica sem alterar o histórico
+python scripts/check.py --history 20     # mostra as 20 últimas entradas
+python scripts/check.py --history-json   # imprime o histórico como JSON (pipeável)
+python scripts/check.py --version        # mostra a versão
+```
+Subir isso com `pip install .` também instala um comando `sis-uema-status` no PATH
+com as mesmas opções.
 
 ### Avisar no Telegram/Discord quando o status mudar
 Dá pra adicionar um passo no workflow que dispara uma notificação comparando o último
 status com o penúltimo. Se quiser, posso montar essa parte também — é só pedir.
-
-### Quantos registros manter no histórico
-Em `scripts/check.py`, a constante `MAX_HISTORY_ENTRIES` (padrão: 2016, equivalente a
-7 dias com check a cada 5 min). Aumente se quiser reter mais histórico — o arquivo JSON
-cresce, mas é leve (poucos KB até milhares de registros).
 
 ---
 
@@ -128,6 +153,9 @@ sis-uema-status/
 │       └── history.json      # histórico de verificações (atualizado automaticamente)
 ├── scripts/
 │   └── check.py              # faz a requisição HTTP e grava o resultado
+├── tests/
+│   └── test_check.py         # 31 testes (offline, sem rede)
+├── pyproject.toml            # empacotamento + console script `sis-uema-status`
 ├── requirements.txt
 └── README.md
 ```
@@ -135,11 +163,12 @@ sis-uema-status/
 ## Rodando localmente (opcional, pra testar antes de subir)
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt          # ou: pip install -e ".[dev]"
 python scripts/check.py
 ```
 
-Isso já atualiza `docs/data/history.json`. Para ver o painel localmente:
+Isso já atualiza `docs/data/history.json`. Use `--dry-run` para testar sem alterar o
+histórico. Para ver o painel localmente:
 
 ```bash
 cd docs
@@ -147,6 +176,16 @@ python -m http.server 8000
 ```
 
 E abra `http://localhost:8000` no navegador.
+
+## Testes
+
+```bash
+pip install -e ".[dev]"
+python -m pytest tests/ -v
+```
+
+Toda a suíte é offline (a requisição HTTP é mockada), então roda sem rede e de forma
+determinística — útil também num CI de terceiros, se algum dia quiser.
 
 ---
 
