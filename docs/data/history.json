@@ -4527,5 +4527,12 @@
     "http_status": null,
     "latency_ms": null,
     "error": "connection_error: HTTPSConnectionPool(host='sis.sig.uema.br', port=443): Max retries exceeded with url: /sigaa/verTelaLogin.do (Caused by NameResolutionError(\"HTTPSConnection(host='sis.sig.uema.br', port=443): Failed to resolve 'sis.sig.uema.br' ([Errno -3] Temporary failure in name resolution)\"))"
+  },
+  {
+    "timestamp": "2026-09-09T17:15:31+00:00",
+    "status": "up",
+    "http_status": 200,
+    "latency_ms": 3144,
+    "error": "ssl_certificate_invalid"
   }
 ]
