@@ -4569,5 +4569,12 @@
     "http_status": 500,
     "latency_ms": 5240,
     "error": "ssl_certificate_invalid"
+  },
+  {
+    "timestamp": "2026-09-10T11:22:02+00:00",
+    "status": "down",
+    "http_status": null,
+    "latency_ms": null,
+    "error": "ssl_error_and_unreachable: HTTPSConnectionPool(host='sis.sig.uema.br', port=443): Read timed out. (read timeout=15)"
   }
 ]
