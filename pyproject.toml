@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sis-uema-status"
+version = "1.1.0"
+description = "Monitor não-oficial de disponibilidade do SIS-UEMA (sis.sig.uema.br)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "maurifalt" }]
+dependencies = ["requests>=2.31.0"]
+keywords = ["uptime", "status", "monitoring", "sis-uema", "uema"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: System :: Monitoring",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "ruff>=0.4"]
+
+[project.scripts]
+sis-uema-status = "check:main"
+
+[project.urls]
+Repository = "https://github.com/maurifalt/sis-uema-status"
+
+# O código vive em scripts/check.py (mantém a compatibilidade do workflow que
+# roda `python scripts/check.py`); o mapeamento sube-o para o módulo `check`
+# na hora de instalar, o que garante o comando `sis-uema-status` no PATH.
+[tool.setuptools]
+package-dir = { "" = "scripts" }
+py-modules = ["check"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "W"]

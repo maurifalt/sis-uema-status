@@ -1,2 +1,12 @@
 __pycache__/
 *.pyc
+*.pyo
+
+# venvs e ferramentas
+.venv/
+.pytest_cache/
+
+# artefatos de build
+build/
+dist/
+*.egg-info/
